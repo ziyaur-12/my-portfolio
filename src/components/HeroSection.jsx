@@ -85,7 +85,7 @@ export default function HeroSection() {
   const skills = ["C", "C++", "Java", "Python", "React", "Node.js", "MongoDB", "SQL", "DBMS"]
 
   return (
-    <section style={{ width:"100%", height:"calc(100vh - 80px)", marginTop:80,
+    <section id="home" style={{ width:"100%", height:"calc(100vh - 80px)", marginTop:80,
       background:"linear-gradient(135deg, #E8E3FF 0%, #EEF2FF 50%, #F0EEFF 100%)",
       padding:"0 60px", display:"grid", gridTemplateColumns:"1fr 1fr",
       alignItems:"center", gap:80, position:"relative", overflow:"hidden", boxSizing:"border-box" }}>
@@ -201,7 +201,7 @@ export default function HeroSection() {
             borderRadius:16, padding:"16px 20px", boxShadow:"0 8px 32px rgba(0,0,0,0.10)",
             border:"1px solid #E5E5E5", display:"flex", gap:24, zIndex:10 }}>
           {[
-            { value:"5+", label:"Languages" },
+            { value:"2", label:"Languages" },
             { value:"10+", label:"Projects" },
             { value:"3+", label:"Yrs Learning" },
           ].map(({ value, label }) => (
