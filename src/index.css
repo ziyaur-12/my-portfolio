@@ -1,46 +1,133 @@
+/* ===== Global Animated Styles ===== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Animated gradient keyframes */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(99,102,241,0.2), 0 0 60px rgba(236,72,153,0.1); }
+  50% { box-shadow: 0 0 40px rgba(99,102,241,0.4), 0 0 80px rgba(236,72,153,0.2); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes blob {
+  0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  25% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+  50% { border-radius: 50% 60% 30% 60% / 30% 60% 70% 40%; }
+  75% { border-radius: 60% 40% 60% 30% / 70% 30% 50% 60%; }
+}
+
+/* Gradient text utility */
+.gradient-text {
+  background: linear-gradient(135deg, #6366F1, #EC4899, #06B6D4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animated gradient button */
+.gradient-btn {
+  background: linear-gradient(135deg, #6366F1, #8B5CF6, #EC4899);
+  background-size: 200% 200%;
+  animation: gradientShift 3s ease infinite;
+}
+
+/* Glass morphism utility */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+[data-theme="dark"] .glass {
+  background: rgba(26, 26, 36, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Colorful scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F5F5F5;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: #111118;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #6366F1, #EC4899);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #818CF8, #F472B6);
+}
+
+/* Smooth theme transitions on body */
+html {
+  transition: background-color 0.3s ease;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+/* Placeholder color for dark mode inputs */
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: #606078;
+}
+
 /* ===== Global Responsive Styles ===== */
+
+/* Prevent horizontal scrolling on mobile */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Smooth font rendering */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
 /* Tablets & below */
 @media (max-width: 900px) {
   nav {
     padding: 0 24px !important;
   }
-
-  /* Hide nav links on small screens, show hamburger later if needed */
-  section {
-    padding-left: 24px !important;
-    padding-right: 24px !important;
-  }
 }
 
 /* Mobile */
 @media (max-width: 768px) {
-  /* Hero: single column */
-  section[id="home"] {
-    grid-template-columns: 1fr !important;
-    height: auto !important;
-    min-height: calc(100vh - 80px);
-    padding-top: 40px !important;
-    padding-bottom: 60px !important;
-    gap: 40px !important;
-  }
-
-  /* Contact: single column */
-  section[id="contact"] > div {
-    grid-template-columns: 1fr !important;
-  }
-
-  nav > div:nth-child(2) {
-    display: none !important;
-  }
-}
-
-@media (max-width: 480px) {
-  nav {
-    padding: 0 16px !important;
-    height: 64px !important;
-  }
-
+  /* Ensure no horizontal overflow */
   section {
     padding-left: 16px !important;
     padding-right: 16px !important;
@@ -49,5 +136,26 @@
   footer {
     padding-left: 16px !important;
     padding-right: 16px !important;
+  }
+
+  /* CTA buttons stack on very small screens */
+  button, a[download] {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  nav {
+    padding: 0 12px !important;
+  }
+
+  section {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  footer {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
   }
 }

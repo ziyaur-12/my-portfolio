@@ -1,38 +1,47 @@
 import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { Send, Mail, Phone, MapPin, CheckCircle, AlertCircle } from 'lucide-react'
+import { useTheme } from '../context/ThemeContext'
+import { useIsMobile } from '../hooks/useIsMobile'
 
 const ACCENT = "#6366F1"
+const PINK = "#EC4899"
+const CYAN = "#06B6D4"
+const GREEN = "#10B981"
 
 // FormSubmit.co — FREE, no signup needed!
 const FORMSUBMIT_EMAIL = "ziyaurrahman457@gmail.com"
 
-function InfoCard({ icon: Icon, title, value, href }) {
+function InfoCard({ icon: Icon, title, value, href, color }) {
+  const { theme } = useTheme()
   return (
     <motion.a
       href={href}
       target={href.startsWith("http") ? "_blank" : undefined}
       rel="noopener noreferrer"
-      whileHover={{ y: -4, boxShadow: "0 8px 24px rgba(99,102,241,0.12)" }}
+      whileHover={{ y: -4, boxShadow: `0 12px 30px ${color || ACCENT}20` }}
       style={{
         display: "flex", alignItems: "center", gap: 16,
-        background: "#fff", borderRadius: 14, padding: "20px 24px",
-        border: "1px solid #E5E5E5", textDecoration: "none",
-        cursor: "pointer", transition: "box-shadow 0.3s",
+        background: theme.glassBg, backdropFilter: "blur(10px)",
+        borderRadius: 16, padding: "22px 24px",
+        border: `1px solid ${theme.glassBorder}`, textDecoration: "none",
+        cursor: "pointer", transition: "box-shadow 0.3s, transform 0.3s, background 0.3s, border-color 0.3s",
+        boxShadow: theme.cardShadow,
       }}
     >
       <div style={{
-        width: 44, height: 44, borderRadius: 12,
-        background: "rgba(99,102,241,0.08)", display: "flex",
-        alignItems: "center", justifyContent: "center", flexShrink: 0,
+        width: 48, height: 48, borderRadius: 14,
+        background: `linear-gradient(135deg, ${color || ACCENT}, ${color || ACCENT}CC)`,
+        display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+        boxShadow: `0 4px 16px ${color || ACCENT}30`,
       }}>
-        <Icon size={20} color={ACCENT} />
+        <Icon size={22} color="#fff" />
       </div>
       <div>
-        <div style={{ fontSize: 12, fontWeight: 600, color: "#999", fontFamily: "'Inter',sans-serif", marginBottom: 4 }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: theme.textLighter, fontFamily: "'Inter',sans-serif", marginBottom: 4, transition: "color 0.3s" }}>
           {title}
         </div>
-        <div style={{ fontSize: 15, fontWeight: 600, color: "#333", fontFamily: "'Inter',sans-serif" }}>
+        <div style={{ fontSize: 15, fontWeight: 600, color: theme.text, fontFamily: "'Inter',sans-serif", transition: "color 0.3s" }}>
           {value}
         </div>
       </div>
@@ -41,6 +50,8 @@ function InfoCard({ icon: Icon, title, value, href }) {
 }
 
 export default function ContactSection() {
+  const { theme, isDark } = useTheme()
+  const isMobile = useIsMobile()
   const [form, setForm] = useState({ name: "", email: "", message: "" })
   const [status, setStatus] = useState(null) // 'sending' | 'success' | 'error'
 
@@ -77,24 +88,38 @@ export default function ContactSection() {
 
   const inputStyle = {
     width: "100%", padding: "14px 18px", borderRadius: 12,
-    border: "1.5px solid #E0E0E0", fontSize: 15, fontWeight: 500,
+    border: `1.5px solid ${theme.inputBorder}`, fontSize: 15, fontWeight: 500,
     fontFamily: "'Inter',sans-serif", outline: "none",
-    transition: "border-color 0.2s", background: "#FAFAFF",
+    transition: "border-color 0.2s, background 0.3s, color 0.3s",
+    background: theme.inputBg, color: theme.text,
   }
 
   return (
     <section id="contact" style={{
-      width: "100%", padding: "100px 60px",
-      background: "linear-gradient(180deg, #FAFAFF 0%, #F5F3FF 100%)",
+      width: "100%", padding: isMobile ? "60px 16px" : "100px 60px",
+      background: theme.sectionBgGradient4,
       display: "flex", flexDirection: "column", alignItems: "center",
+      position: "relative", overflow: "hidden",
+      transition: "background 0.4s ease",
     }}>
+      {/* Background accents */}
+      <div style={{
+        position: "absolute", top: "5%", left: "-8%", width: 400, height: 400,
+        borderRadius: "50%", background: "radial-gradient(circle, rgba(99,102,241,0.06), transparent)",
+        pointerEvents: "none",
+      }} />
+      <div style={{
+        position: "absolute", bottom: "5%", right: "-5%", width: 350, height: 350,
+        borderRadius: "50%", background: "radial-gradient(circle, rgba(236,72,153,0.06), transparent)",
+        pointerEvents: "none",
+      }} />
       <motion.span
         initial={{ opacity: 0, y: -10 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.4 }}
         style={{
-          display: "inline-block", background: "rgba(99,102,241,0.08)",
+          display: "inline-block", background: theme.tagBg,
           color: ACCENT, borderRadius: 20, padding: "6px 18px",
           fontSize: 13, fontWeight: 600, letterSpacing: 1,
           fontFamily: "'Inter',sans-serif", marginBottom: 16,
@@ -110,11 +135,17 @@ export default function ContactSection() {
         transition={{ duration: 0.5, delay: 0.1 }}
         style={{
           fontSize: "clamp(28px, 3vw, 40px)", fontWeight: 800,
-          color: "#000", textAlign: "center", marginBottom: 16,
+          color: theme.heading, textAlign: "center", marginBottom: 16,
           fontFamily: "'Inter',sans-serif", letterSpacing: "-0.5px",
+          transition: "color 0.3s",
         }}
       >
-        Let's <span style={{ color: ACCENT }}>connect</span>
+        Let's{" "}
+        <span style={{
+          background: "linear-gradient(135deg, #6366F1, #EC4899)",
+          WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
+        }}>connect</span>
       </motion.h2>
 
       <motion.p
@@ -123,8 +154,9 @@ export default function ContactSection() {
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.2 }}
         style={{
-          fontSize: 15, color: "#666", textAlign: "center",
+          fontSize: 15, color: theme.textMuted, textAlign: "center",
           maxWidth: 500, marginBottom: 56, fontFamily: "'Inter',sans-serif",
+          transition: "color 0.3s",
         }}
       >
         Have a project idea or want to work together? Drop me a message
@@ -132,7 +164,7 @@ export default function ContactSection() {
       </motion.p>
 
       <div style={{
-        display: "grid", gridTemplateColumns: "1fr 1fr", gap: 48,
+        display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: isMobile ? 32 : 48,
         width: "100%", maxWidth: 960,
       }}>
         {/* Left — Info Cards */}
@@ -143,9 +175,9 @@ export default function ContactSection() {
           transition={{ duration: 0.5, delay: 0.15 }}
           style={{ display: "flex", flexDirection: "column", gap: 16 }}
         >
-          <InfoCard icon={Mail} title="EMAIL" value="ziyaurrahman457@gmail.com" href="mailto:ziyaurrahman457@gmail.com" />
-          <InfoCard icon={Phone} title="PHONE" value="+91 91363 41425" href="tel:+919136341425" />
-          <InfoCard icon={MapPin} title="LOCATION" value="Jaipur, Rajasthan, India" href="https://maps.google.com/?q=Jaipur+Rajasthan" />
+          <InfoCard icon={Mail} title="EMAIL" value="ziyaurrahman457@gmail.com" href="mailto:ziyaurrahman457@gmail.com" color={ACCENT} />
+          <InfoCard icon={Phone} title="PHONE" value="+91 91363 41425" href="tel:+919136341425" color={PINK} />
+          <InfoCard icon={MapPin} title="LOCATION" value="Jaipur, Rajasthan, India" href="https://maps.google.com/?q=Jaipur+Rajasthan" color={CYAN} />
         </motion.div>
 
         {/* Right — Contact Form */}
@@ -165,7 +197,7 @@ export default function ContactSection() {
             required
             style={inputStyle}
             onFocus={e => e.target.style.borderColor = ACCENT}
-            onBlur={e => e.target.style.borderColor = "#E0E0E0"}
+            onBlur={e => e.target.style.borderColor = theme.inputBorder}
           />
           <input
             name="email"
@@ -176,7 +208,7 @@ export default function ContactSection() {
             required
             style={inputStyle}
             onFocus={e => e.target.style.borderColor = ACCENT}
-            onBlur={e => e.target.style.borderColor = "#E0E0E0"}
+            onBlur={e => e.target.style.borderColor = theme.inputBorder}
           />
           <textarea
             name="message"
@@ -187,7 +219,7 @@ export default function ContactSection() {
             rows={5}
             style={{ ...inputStyle, resize: "vertical", minHeight: 120 }}
             onFocus={e => e.target.style.borderColor = ACCENT}
-            onBlur={e => e.target.style.borderColor = "#E0E0E0"}
+            onBlur={e => e.target.style.borderColor = theme.inputBorder}
           />
 
           <motion.button
@@ -197,7 +229,8 @@ export default function ContactSection() {
             whileTap={{ scale: 0.97 }}
             style={{
               display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-              background: ACCENT, color: "#fff", border: `2px solid ${ACCENT}`,
+              background: "linear-gradient(135deg, #6366F1, #8B5CF6, #EC4899)",
+              color: "#fff", border: "none",
               borderRadius: 12, padding: "14px 28px", fontSize: 15, fontWeight: 600,
               fontFamily: "'Inter',sans-serif", cursor: status === "sending" ? "wait" : "pointer",
               opacity: status === "sending" ? 0.7 : 1,

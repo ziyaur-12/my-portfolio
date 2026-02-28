@@ -1,11 +1,23 @@
 import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import { Github, ExternalLink, Star, GitFork } from 'lucide-react'
+import { useTheme } from '../context/ThemeContext'
+import { useIsMobile } from '../hooks/useIsMobile'
 
 const ACCENT = "#6366F1"
+const PINK = "#EC4899"
+const CYAN = "#06B6D4"
 const GITHUB_USERNAME = "ziyaur-12"
 
+const cardGradients = [
+  "linear-gradient(135deg, rgba(99,102,241,0.05), rgba(236,72,153,0.05))",
+  "linear-gradient(135deg, rgba(6,182,212,0.05), rgba(99,102,241,0.05))",
+  "linear-gradient(135deg, rgba(236,72,153,0.05), rgba(245,158,11,0.05))",
+  "linear-gradient(135deg, rgba(16,185,129,0.05), rgba(6,182,212,0.05))",
+]
+
 function ProjectCard({ repo, delay }) {
+  const { theme } = useTheme()
   const langColors = {
     JavaScript: "#F7DF1E", Python: "#3776AB", Java: "#B07219",
     "C++": "#F34B7D", C: "#555555", HTML: "#E34C26",
@@ -18,31 +30,36 @@ function ProjectCard({ repo, delay }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.5, delay }}
-      whileHover={{ y: -8, boxShadow: "0 16px 40px rgba(99,102,241,0.15)" }}
+      whileHover={{ y: -8, boxShadow: "0 16px 40px rgba(99,102,241,0.18), 0 0 60px rgba(236,72,153,0.08)" }}
       style={{
-        background: "#fff", borderRadius: 16, padding: "28px 24px",
-        border: "1px solid #E5E5E5", display: "flex", flexDirection: "column",
-        gap: 14, cursor: "default", transition: "box-shadow 0.3s",
-        minHeight: 220,
+        background: theme.cardBg, borderRadius: 20, padding: "28px 24px",
+        border: `1px solid ${theme.cardBorder}`, display: "flex", flexDirection: "column",
+        gap: 14, cursor: "default", transition: "box-shadow 0.3s, background 0.3s, border-color 0.3s",
+        minHeight: 220, position: "relative", overflow: "hidden",
       }}
     >
+      {/* Top gradient accent line */}
+      <div style={{
+        position: "absolute", top: 0, left: 0, right: 0,
+        height: 3, background: "linear-gradient(90deg, #6366F1, #EC4899, #06B6D4)",
+      }} />
       {/* Top row */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
         <div style={{
           width: 44, height: 44, borderRadius: 12,
-          background: "rgba(99,102,241,0.08)", display: "flex",
+          background: "linear-gradient(135deg, rgba(99,102,241,0.1), rgba(236,72,153,0.1))", display: "flex",
           alignItems: "center", justifyContent: "center", flexShrink: 0,
         }}>
           <Github size={22} color={ACCENT} />
         </div>
         <div style={{ display: "flex", gap: 8 }}>
           {repo.stargazers_count > 0 && (
-            <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 12, color: "#888" }}>
+            <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 12, color: theme.textLight }}>
               <Star size={14} /> {repo.stargazers_count}
             </span>
           )}
           {repo.forks_count > 0 && (
-            <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 12, color: "#888" }}>
+            <span style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 12, color: theme.textLight }}>
               <GitFork size={14} /> {repo.forks_count}
             </span>
           )}
@@ -51,16 +68,16 @@ function ProjectCard({ repo, delay }) {
 
       {/* Name */}
       <h3 style={{
-        fontSize: 17, fontWeight: 700, color: "#000",
-        fontFamily: "'Inter',sans-serif",
+        fontSize: 17, fontWeight: 700, color: theme.heading,
+        fontFamily: "'Inter',sans-serif", transition: "color 0.3s",
       }}>
         {repo.name.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase())}
       </h3>
 
       {/* Description */}
       <p style={{
-        fontSize: 14, lineHeight: 1.6, color: "#666",
-        fontFamily: "'Inter',sans-serif", flex: 1,
+        fontSize: 14, lineHeight: 1.6, color: theme.textMuted,
+        fontFamily: "'Inter',sans-serif", flex: 1, transition: "color 0.3s",
       }}>
         {repo.description || "A project built with passion and code."}
       </p>
@@ -73,7 +90,7 @@ function ProjectCard({ repo, delay }) {
               width: 10, height: 10, borderRadius: "50%",
               background: langColors[repo.language] || "#888",
             }} />
-            <span style={{ fontSize: 12, fontWeight: 500, color: "#666", fontFamily: "'Inter',sans-serif" }}>
+            <span style={{ fontSize: 12, fontWeight: 500, color: theme.textMuted, fontFamily: "'Inter',sans-serif" }}>
               {repo.language}
             </span>
           </div>
@@ -84,7 +101,7 @@ function ProjectCard({ repo, delay }) {
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.1, color: ACCENT }}
-            style={{ color: "#888", display: "flex", alignItems: "center" }}
+            style={{ color: theme.textLight, display: "flex", alignItems: "center" }}
           >
             <Github size={18} />
           </motion.a>
@@ -94,7 +111,7 @@ function ProjectCard({ repo, delay }) {
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.1, color: ACCENT }}
-              style={{ color: "#888", display: "flex", alignItems: "center" }}
+              style={{ color: theme.textLight, display: "flex", alignItems: "center" }}
             >
               <ExternalLink size={18} />
             </motion.a>
@@ -131,18 +148,35 @@ export default function ProjectsSection() {
       })
   }, [])
 
+  const { theme } = useTheme()
+  const isMobile = useIsMobile()
+
   return (
     <section id="projects" style={{
-      width: "100%", padding: "100px 60px", background: "#fff",
+      width: "100%", padding: isMobile ? "60px 16px" : "100px 60px",
+      background: theme.sectionBgGradient3,
       display: "flex", flexDirection: "column", alignItems: "center",
+      position: "relative", overflow: "hidden",
+      transition: "background 0.4s ease",
     }}>
+      {/* Background decorations */}
+      <div style={{
+        position: "absolute", top: "20%", left: "-8%", width: 350, height: 350,
+        borderRadius: "50%", background: "radial-gradient(circle, rgba(99,102,241,0.04), transparent)",
+        pointerEvents: "none",
+      }} />
+      <div style={{
+        position: "absolute", bottom: "10%", right: "-5%", width: 300, height: 300,
+        borderRadius: "50%", background: "radial-gradient(circle, rgba(236,72,153,0.04), transparent)",
+        pointerEvents: "none",
+      }} />
       <motion.span
         initial={{ opacity: 0, y: -10 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.4 }}
         style={{
-          display: "inline-block", background: "rgba(99,102,241,0.08)",
+          display: "inline-block", background: theme.tagBg,
           color: ACCENT, borderRadius: 20, padding: "6px 18px",
           fontSize: 13, fontWeight: 600, letterSpacing: 1,
           fontFamily: "'Inter',sans-serif", marginBottom: 16,
@@ -158,11 +192,17 @@ export default function ProjectsSection() {
         transition={{ duration: 0.5, delay: 0.1 }}
         style={{
           fontSize: "clamp(28px, 3vw, 40px)", fontWeight: 800,
-          color: "#000", textAlign: "center", marginBottom: 16,
+          color: theme.heading, textAlign: "center", marginBottom: 16,
           fontFamily: "'Inter',sans-serif", letterSpacing: "-0.5px",
+          transition: "color 0.3s",
         }}
       >
-        Things I've <span style={{ color: ACCENT }}>built</span>
+        Things I've{" "}
+        <span style={{
+          background: "linear-gradient(135deg, #6366F1, #EC4899)",
+          WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+          backgroundClip: "text",
+        }}>built</span>
       </motion.h2>
 
       <motion.p
@@ -171,8 +211,9 @@ export default function ProjectsSection() {
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.2 }}
         style={{
-          fontSize: 15, color: "#666", textAlign: "center",
+          fontSize: 15, color: theme.textMuted, textAlign: "center",
           maxWidth: 540, marginBottom: 56, fontFamily: "'Inter',sans-serif",
+          transition: "color 0.3s",
         }}
       >
         All projects are fetched directly from my GitHub. Click on any project
@@ -202,7 +243,7 @@ export default function ProjectsSection() {
       {!loading && !error && (
         <div style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+          gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(300px, 1fr))",
           gap: 28, width: "100%", maxWidth: 1000,
         }}>
           {repos.map((repo, i) => (
@@ -212,7 +253,7 @@ export default function ProjectsSection() {
       )}
 
       {!loading && !error && repos.length === 0 && (
-        <p style={{ fontSize: 15, color: "#888", fontFamily: "'Inter',sans-serif" }}>
+        <p style={{ fontSize: 15, color: theme.textLight, fontFamily: "'Inter',sans-serif" }}>
           No projects found.
         </p>
       )}
@@ -231,10 +272,12 @@ export default function ProjectsSection() {
           whileTap={{ scale: 0.97 }}
           style={{
             marginTop: 48, display: "inline-flex", alignItems: "center", gap: 8,
-            background: ACCENT, color: "#fff", borderRadius: 12,
+            background: "linear-gradient(135deg, #6366F1, #8B5CF6, #EC4899)",
+            color: "#fff", borderRadius: 12,
             padding: "14px 28px", fontSize: 15, fontWeight: 600,
             fontFamily: "'Inter',sans-serif", textDecoration: "none",
-            border: `2px solid ${ACCENT}`,
+            border: "none",
+            boxShadow: "0 4px 20px rgba(99,102,241,0.3)",
           }}
         >
           <Github size={18} /> View All on GitHub
