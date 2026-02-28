@@ -13,11 +13,11 @@ const skillCategories = [
     color: ACCENT,
     gradient: "linear-gradient(90deg, #6366F1, #818CF8, #A78BFA)",
     skills: [
-      { name: "C", level: 100 },
-      { name: "C++", level: 100 },
-      { name: "Java", level: 100 },
-      { name: "Python", level: 100 },
-      { name: "JavaScript", level: 100 },
+      { name: "C", level: 85 },
+      { name: "C++", level: 80 },
+      { name: "Java", level: 75 },
+      { name: "Python", level: 78 },
+      { name: "JavaScript", level: 88 },
     ],
   },
   {
@@ -25,10 +25,10 @@ const skillCategories = [
     color: PINK,
     gradient: "linear-gradient(90deg, #EC4899, #F472B6, #F9A8D4)",
     skills: [
-      { name: "React.js", level: 100 },
-      { name: "HTML5", level: 100 },
-      { name: "CSS3 / Tailwind", level: 100 },
-      { name: "Framer Motion", level: 100 },
+      { name: "React.js", level: 85 },
+      { name: "HTML5", level: 92 },
+      { name: "CSS3 / Tailwind", level: 88 },
+      { name: "Framer Motion", level: 72 },
     ],
   },
   {
@@ -36,9 +36,9 @@ const skillCategories = [
     color: CYAN,
     gradient: "linear-gradient(90deg, #06B6D4, #22D3EE, #67E8F9)",
     skills: [
-      { name: "Node.js", level: 100 },
-      { name: "Express.js", level: 100 },
-      { name: "REST APIs", level: 100 },
+      { name: "Node.js", level: 82 },
+      { name: "Express.js", level: 80 },
+      { name: "REST APIs", level: 85 },
     ],
   },
   {
@@ -46,10 +46,10 @@ const skillCategories = [
     color: AMBER,
     gradient: "linear-gradient(90deg, #F59E0B, #FBBF24, #FDE68A)",
     skills: [
-      { name: "MongoDB", level: 100 },
-      { name: "SQL / MySQL", level: 100 },
-      { name: "Git / GitHub", level: 100 },
-      { name: "DBMS Concepts", level: 100 },
+      { name: "MongoDB", level: 78 },
+      { name: "SQL / MySQL", level: 75 },
+      { name: "Git / GitHub", level: 88 },
+      { name: "DBMS Concepts", level: 72 },
     ],
   },
 ]

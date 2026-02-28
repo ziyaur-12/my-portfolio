@@ -24,9 +24,9 @@ const experience = [
 
 const education = [
   {
-    period: "2021 – 2025",
+    period: "2023 – 2027",
     degree: "B.Tech in Computer Science",
-    institute: "University",
+    institute: "University: Rajasthan Technical University kota Rajasthan",
     desc: "Core subjects: DSA, DBMS, OS, Computer Networks. Active in coding contests and open-source contributions.",
   },
 ]
