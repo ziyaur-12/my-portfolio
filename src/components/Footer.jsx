@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Github, Twitter, Instagram, Heart } from 'lucide-react'
+import { Github, Linkedin, Instagram, Heart } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
 import { useIsMobile } from '../hooks/useIsMobile'
 
@@ -8,7 +8,7 @@ const PINK = "#EC4899"
 const CYAN = "#06B6D4"
 
 const socialLinks = [
-  { icon: Twitter, href: "https://twitter.com/ZiyaurR67059204", label: "Twitter", color: "#1DA1F2" },
+  { icon: Linkedin, href: "https://www.linkedin.com/in/ziyaur-rahman-78570a251", label: "LinkedIn", color: "#0A66C2" },
   { icon: Instagram, href: "https://instagram.com/ziyaur786rahman", label: "Instagram", color: "#E4405F" },
   { icon: Github, href: "https://github.com/ziyaur-12", label: "GitHub", color: "#fff" },
 ]

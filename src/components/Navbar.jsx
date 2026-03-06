@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState } from 'react'
-import { Twitter, Github, Instagram, Sun, Moon, Menu, X } from 'lucide-react'
+import { Linkedin, Github, Instagram, Sun, Moon, Menu, X } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
 import { useIsMobile } from '../hooks/useIsMobile'
 
@@ -160,9 +160,9 @@ export default function Navbar() {
           <ThemeToggle size={isMobile ? 36 : 40} />
           {!isMobile && (
             <>
-              <SocialBtn icon={Twitter}   href="https://twitter.com/ZiyaurR67059204" hoverColor="#1DA1F2" />
               <SocialBtn icon={Instagram} href="https://instagram.com/ziyaur786rahman" hoverColor="#E4405F" />
               <SocialBtn icon={Github}    href="https://github.com/ziyaur-12" hoverColor="#333" />
+              <SocialBtn icon={Linkedin}  href="https://www.linkedin.com/in/ziyaur-rahman-78570a251" hoverColor="#0A66C2" />
             </>
           )}
           {isMobile && (
@@ -206,9 +206,9 @@ export default function Navbar() {
               <NavLink key={l} label={l} onClick={() => setMenuOpen(false)} />
             ))}
             <div style={{ display: "flex", gap: 10, paddingTop: 8 }}>
-              <SocialBtn icon={Twitter}   href="https://twitter.com/ZiyaurR67059204" hoverColor="#1DA1F2" size={36} iconSize={16} />
               <SocialBtn icon={Instagram} href="https://instagram.com/ziyaur786rahman" hoverColor="#E4405F" size={36} iconSize={16} />
               <SocialBtn icon={Github}    href="https://github.com/ziyaur-12" hoverColor="#333" size={36} iconSize={16} />
+              <SocialBtn icon={Linkedin}  href="https://www.linkedin.com/in/ziyaur-rahman-78570a251" hoverColor="#0A66C2" size={36} iconSize={16} />
             </div>
           </motion.div>
         )}
