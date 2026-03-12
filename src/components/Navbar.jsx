@@ -1,10 +1,11 @@
-import { motion, AnimatePresence } from 'framer-motion'
-import { useState } from 'react'
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion'
+import { useState, useEffect } from 'react'
 import { Linkedin, Github, Instagram, Sun, Moon, Menu, X } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
 import { useIsMobile } from '../hooks/useIsMobile'
 
-const navLinks = ["Home", "About", "Skills", "Projects", "Resume", "Contact"]
+const navLinks = ["Home", "About", "Skills", "Projects", "Resume", "Activities", "Blog", "Contact"]
+const sectionIds = ["home", "about", "skills", "projects", "resume", "activities", "blog", "contact"]
 const ACCENT_COLOR = "#6366F1"
 const PINK = "#EC4899"
 
@@ -41,9 +42,8 @@ function SocialBtn({ icon: Icon, href = "#", hoverColor, size = 40, iconSize = 1
   )
 }
 
-function NavLink({ label, onClick }) {
+function NavLink({ label, onClick, active }) {
   const { theme } = useTheme()
-  const active = label === "Home"
   return (
     <motion.a
       href={`#${label.toLowerCase()}`}
@@ -110,6 +110,28 @@ export default function Navbar() {
   const { theme } = useTheme()
   const isMobile = useIsMobile()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState("home")
+
+  // Scroll progress bar
+  const { scrollYProgress } = useScroll()
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 })
+
+  // Active section tracking on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const offset = 150
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sectionIds[i])
+        if (el && el.getBoundingClientRect().top <= offset) {
+          setActiveSection(sectionIds[i])
+          break
+        }
+      }
+    }
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    handleScroll()
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   return (
     <>
@@ -151,7 +173,7 @@ export default function Navbar() {
         {/* Desktop Nav Links */}
         {!isMobile && (
           <div style={{ display: "flex", alignItems: "center", gap: 32 }}>
-            {navLinks.map(l => <NavLink key={l} label={l} />)}
+            {navLinks.map(l => <NavLink key={l} label={l} active={activeSection === l.toLowerCase()} />)}
           </div>
         )}
 
@@ -181,6 +203,17 @@ export default function Navbar() {
             </motion.button>
           )}
         </div>
+
+        {/* Scroll Progress Bar */}
+        <motion.div
+          style={{
+            position: "absolute", bottom: 0, left: 0,
+            height: 3, width: "100%",
+            background: "linear-gradient(90deg, #6366F1, #EC4899, #06B6D4)",
+            transformOrigin: "0%",
+            scaleX,
+          }}
+        />
       </motion.nav>
 
       {/* Mobile Menu Overlay */}
@@ -203,7 +236,7 @@ export default function Navbar() {
             }}
           >
             {navLinks.map(l => (
-              <NavLink key={l} label={l} onClick={() => setMenuOpen(false)} />
+              <NavLink key={l} label={l} active={activeSection === l.toLowerCase()} onClick={() => setMenuOpen(false)} />
             ))}
             <div style={{ display: "flex", gap: 10, paddingTop: 8 }}>
               <SocialBtn icon={Instagram} href="https://instagram.com/ziyaur786rahman" hoverColor="#E4405F" size={36} iconSize={16} />

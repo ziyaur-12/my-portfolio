@@ -1,6 +1,6 @@
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect } from 'react'
-import { Github, ExternalLink, Star, GitFork } from 'lucide-react'
+import { Github, ExternalLink, Star, GitFork, ChevronDown, ChevronUp } from 'lucide-react'
 import { useTheme } from '../context/ThemeContext'
 import { useIsMobile } from '../hooks/useIsMobile'
 
@@ -134,11 +134,11 @@ export default function ProjectsSection() {
         return res.json()
       })
       .then(data => {
-        // Filter out forks and non-project repos, show repos with most stars first
+        // Filter out forks and non-project repos, show most recent first
         const excluded = ['dsa', 'ziyaur-12']
         const filtered = data
           .filter(r => !r.fork && !excluded.includes(r.name.toLowerCase()))
-          .sort((a, b) => b.stargazers_count - a.stargazers_count)
+          .sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at))
         setRepos(filtered)
         setLoading(false)
       })
@@ -150,6 +150,9 @@ export default function ProjectsSection() {
 
   const { theme } = useTheme()
   const isMobile = useIsMobile()
+  const [showAll, setShowAll] = useState(false)
+  const INITIAL_COUNT = 3
+  const visibleRepos = showAll ? repos : repos.slice(0, INITIAL_COUNT)
 
   return (
     <section id="projects" style={{
@@ -246,10 +249,39 @@ export default function ProjectsSection() {
           gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(300px, 1fr))",
           gap: 28, width: "100%", maxWidth: 1000,
         }}>
-          {repos.map((repo, i) => (
-            <ProjectCard key={repo.id} repo={repo} delay={i * 0.08} />
-          ))}
+          <AnimatePresence>
+            {visibleRepos.map((repo, i) => (
+              <ProjectCard key={repo.id} repo={repo} delay={i * 0.08} />
+            ))}
+          </AnimatePresence>
         </div>
+      )}
+
+      {/* Show More / Show Less */}
+      {!loading && !error && repos.length > INITIAL_COUNT && (
+        <motion.button
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          whileHover={{ scale: 1.04, boxShadow: "0 8px 24px rgba(99,102,241,0.18)" }}
+          whileTap={{ scale: 0.97 }}
+          onClick={() => setShowAll(prev => !prev)}
+          style={{
+            marginTop: 36, display: "inline-flex", alignItems: "center", gap: 8,
+            background: theme.cardBg,
+            color: ACCENT, borderRadius: 14,
+            padding: "13px 28px", fontSize: 14, fontWeight: 600,
+            fontFamily: "'Inter',sans-serif", cursor: "pointer",
+            border: `1.5px solid ${ACCENT}`,
+            transition: "all 0.3s",
+          }}
+        >
+          {showAll ? (
+            <><ChevronUp size={18} /> Show Less</>
+          ) : (
+            <><ChevronDown size={18} /> Show More ({repos.length - INITIAL_COUNT} more)</>
+          )}
+        </motion.button>
       )}
 
       {!loading && !error && repos.length === 0 && (
